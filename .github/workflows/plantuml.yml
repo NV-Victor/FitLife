@@ -13,27 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Java
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'temurin'
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Download PlantUML .jar
-      run: |
-        curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+      - name: Download PlantUML .jar
+        run: curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
 
-    - name: Generate Diagrams
-      run: |
-        java -jar plantuml.jar diagrams/context/*.puml
-        java -jar plantuml.jar diagrams/container/*.puml
-        java -jar plantuml.jar diagrams/component/*.puml
-        java -jar plantuml.jar diagrams/code/*.puml
+      - name: Generate Diagrams
+        run: |
+          java -jar plantuml.jar diagrams/context/*.puml
+          java -jar plantuml.jar diagrams/container/*.puml
+          java -jar plantuml.jar diagrams/component/*.puml
+          java -jar plantuml.jar diagrams/code/*.puml
 
-    - name: Commit and Push Diagrams
+      - name: Commit and Push Diagrams
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated diagram generation"
@@ -41,5 +40,4 @@ jobs:
           file_pattern: diagrams/**/*.png
           commit_user_name: github-actions[bot]
           commit_user_email: github-actions[bot]@users.noreply.github.com
-      token: ${{ secrets.GITHUB_TOKEN }}
-      if: success()
+          token: ${{ secrets.GITHUB_TOKEN }}
